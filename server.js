@@ -13,8 +13,8 @@ const exphbs = require('express-handlebars');
 const io = require('socket.io')(server);
 
 // const sock = require('./sockets/chat.js')(io);
-io.on('Connection', (socket) => {
-  console.log(`🔌 New user connected! 🔌 ${socket}`);
+io.on('connection', (socket) => {
+  console.log('🔌 New user connected! 🔌');
   // sock(io, socket);
   require('./sockets/chat.js')(io, socket);
 });

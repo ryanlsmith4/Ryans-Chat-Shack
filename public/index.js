@@ -6,6 +6,7 @@ $(document).ready(() => {
   // Keep track of the current user
   let currentUser;
 
+
   $('#createUserBtn').click((e) => {
     e.preventDefault();
     if ($('#usernameInput').val().length > 0) {
