@@ -3,18 +3,20 @@ const express = require('express');
 
 const app = express();
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 // Socket.io has to use the http Server
 const server = require('http').Server(app);
 // Define handlebars
 const exphbs = require('express-handlebars');
 
-
 // Socket.io
 const io = require('socket.io')(server);
 
+// const sock = require('./sockets/chat.js')(io);
 io.on('Connection', (socket) => {
   console.log(`🔌 New user connected! 🔌 ${socket}`);
+  // sock(io, socket);
+  require('./sockets/chat.js')(io, socket);
 });
 
 // MiddleWare
@@ -28,6 +30,6 @@ app.get('/', (req, res) => {
   res.render('index.handlebars');
 });
 
-server.listen(port, () => {
-  console.log(`Server Listening on ${port}`);
+server.listen(PORT, () => {
+  console.log(`Server Listening on ${PORT}`);
 });
