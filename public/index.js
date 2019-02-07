@@ -75,4 +75,26 @@ $(document).ready(() => {
       $('#newChannelInput').val();
     }
   });
+
+  socket.on('new channel', (newChannel) => {
+    $('.channels').append(`<div class='channel'>${newChannel}</div>`);
+  });
+
+  // Make the channel joined the current channel.then load messages.
+  // this only fires for the client who made the channel.
+  socket.on('user changed channel', (data) => {
+    $('.channel-current').addClass('channel');
+    $('.channel-current').removeClass('channel-current');
+    $(`.channel:contains('${data.channel}')`).addClass('channel-current');
+    $('.channel-current').removeClass('channel');
+    $('.message').remove();
+    data.messages.forEach((message) => {
+      $('.messagesContainer').append(`
+        <div class='message'>
+          <p class='messageUser'>${mssage.sender}: </p>
+          <p class='messageText'>${message.message}</p>
+        </div>
+      `);
+    });
+  });
 });

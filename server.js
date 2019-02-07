@@ -14,11 +14,13 @@ const io = require('socket.io')(server);
 
 const onlineUsers = {};
 
+const channels = { General: [] }
+
 // const sock = require('./sockets/chat.js')(io);
 io.on('connection', (socket) => {
   console.log('🔌 New user connected! 🔌');
   // sock(io, socket);
-  require('./sockets/chat.js')(io, socket, onlineUsers);
+  require('./sockets/chat.js')(io, socket, onlineUsers, channels);
 });
 
 // MiddleWare
