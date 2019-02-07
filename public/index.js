@@ -7,6 +7,14 @@ $(document).ready(() => {
   // Keep track of the current user
   let currentUser;
   socket.emit('get online users');
+  // Each user should be in the general by default.
+  socket.emit('user changed channel', 'General');
+
+  // Users can change the channel by clicking on its name.
+  $(document).on('click', '.channel', (e) => {
+    const newChannel = e.target.textContent;
+    socket.emit('user changed channel', newChannel);
+  });
 
 
   $('#createUserBtn').click((e) => {
@@ -23,7 +31,7 @@ $(document).ready(() => {
   $('#sendChatBtn').click((e) => {
     e.preventDefault();
 
-    const channel = $('.channel-current').text(;)
+    const channel = $('.channel-current').text();
     // Get the message text value
     const message = $('#chatInput').val();
     // Make sure it's not empty
