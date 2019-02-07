@@ -1,10 +1,12 @@
-
+/* eslint no-undef: "off" */
+/* eslint guard-for-in: "off" */
+/* eslint no-restricted-syntax: "off" */
 $(document).ready(() => {
   // Connect to socket.io Server
   const socket = io.connect();
-
   // Keep track of the current user
   let currentUser;
+  socket.emit('get online users');
 
 
   $('#createUserBtn').click((e) => {
@@ -21,15 +23,15 @@ $(document).ready(() => {
   $('#sendChatBtn').click((e) => {
     e.preventDefault();
     // Get the message text value
-    let message = $('#chatInput').val();
+    const message = $('#chatInput').val();
     // Make sure it's not empty
     if (message.length > 0) {
       // Emit the message with the current user to the Server
       socket.emit('new message', {
         sender: currentUser,
-        message: message,
+        message,
       });
-      $('chaiInput').val('');
+      $('#chatInput').val('');
     }
   });
 
@@ -38,7 +40,7 @@ $(document).ready(() => {
   socket.on('new user', (username) => {
     console.log(`✋ ${username} has joined the chat! ✋`);
     // add the new user to the online users div
-    $('.userOnline').append(`<div class='userOnline'>${username}</div>`);
+    $('.usersOnline').append(`<p class='userOnline'>${username}</p>`);
   });
 
   socket.on('new message', (data) => {
@@ -48,5 +50,19 @@ $(document).ready(() => {
         <p class-'messageText'>${data.message}</p>
       </div>
     `);
+  });
+
+  socket.on('get online users', (onlineUsers) => {
+    for (username in onlineUsers) {
+      $('.usersOnline').append(`<p class='userOnline'>${username}</p>`);
+    }
+  });
+
+  // remove person once logged off
+  socket.on('user has left', (onlineUsers) => {
+    $('.usersOnline').empty();
+    for (username in onlineUsers) {
+      $('usersOnline').append(`<p>${username}</p>`);
+    }
   });
 });

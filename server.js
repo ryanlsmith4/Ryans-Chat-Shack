@@ -12,11 +12,13 @@ const exphbs = require('express-handlebars');
 // Socket.io
 const io = require('socket.io')(server);
 
+const onlineUsers = {};
+
 // const sock = require('./sockets/chat.js')(io);
 io.on('connection', (socket) => {
   console.log('🔌 New user connected! 🔌');
   // sock(io, socket);
-  require('./sockets/chat.js')(io, socket);
+  require('./sockets/chat.js')(io, socket, onlineUsers);
 });
 
 // MiddleWare
