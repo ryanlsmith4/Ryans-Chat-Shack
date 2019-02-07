@@ -22,6 +22,8 @@ $(document).ready(() => {
 
   $('#sendChatBtn').click((e) => {
     e.preventDefault();
+
+    const channel = $('.channel-current').text(;)
     // Get the message text value
     const message = $('#chatInput').val();
     // Make sure it's not empty
@@ -30,6 +32,7 @@ $(document).ready(() => {
       socket.emit('new message', {
         sender: currentUser,
         message,
+        channel,
       });
       $('#chatInput').val('');
     }
@@ -44,12 +47,16 @@ $(document).ready(() => {
   });
 
   socket.on('new message', (data) => {
+    // Only append the message if the user is in chat.
+    const currentChannel = $('.channel-current').text();
+    if (currentChannel == data.channel) {
     $('.messageContainer').append(`
       <div class='message'>
         <p class='messageUser'>${data.sender}:</p>
         <p class-'messageText'>${data.message}</p>
       </div>
     `);
+  }
   });
 
   socket.on('get online users', (onlineUsers) => {
@@ -76,12 +83,13 @@ $(document).ready(() => {
     }
   });
 
+  // Add the new channel to the channels list (Fires for all clients)
   socket.on('new channel', (newChannel) => {
-    $('.channels').append(`<div class='channel'>${newChannel}</div>`);
+    $('.channels').append(`<div class="channel">${newChannel}</div>`);
   });
 
-  // Make the channel joined the current channel.then load messages.
-  // this only fires for the client who made the channel.
+  // Make the channel joined the current channel. Then load the messages.
+  // This only fires for the client who made the channel.
   socket.on('user changed channel', (data) => {
     $('.channel-current').addClass('channel');
     $('.channel-current').removeClass('channel-current');
@@ -89,10 +97,10 @@ $(document).ready(() => {
     $('.channel-current').removeClass('channel');
     $('.message').remove();
     data.messages.forEach((message) => {
-      $('.messagesContainer').append(`
-        <div class='message'>
-          <p class='messageUser'>${mssage.sender}: </p>
-          <p class='messageText'>${message.message}</p>
+      $('.messageContainer').append(`
+        <div class="message">
+          <p class="messageUser">${message.sender}: </p>
+          <p class="messageText">${message.message}</p>
         </div>
       `);
     });
