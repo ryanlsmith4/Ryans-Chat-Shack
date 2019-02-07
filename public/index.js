@@ -53,7 +53,7 @@ $(document).ready(() => {
   });
 
   socket.on('get online users', (onlineUsers) => {
-    for (username in onlineUsers) {
+    for (const username in onlineUsers) {
       $('.usersOnline').append(`<p class='userOnline'>${username}</p>`);
     }
   });
@@ -61,8 +61,18 @@ $(document).ready(() => {
   // remove person once logged off
   socket.on('user has left', (onlineUsers) => {
     $('.usersOnline').empty();
-    for (username in onlineUsers) {
+    for (const username in onlineUsers) {
       $('usersOnline').append(`<p>${username}</p>`);
+    }
+  });
+
+  $('#newChannelBtn').click(() => {
+    const newChannel = $('#newChannelInput').val();
+
+    if (newChannel.length > 0) {
+      // Emit the new channel to server
+      socket.emit('new channel', newChannel);
+      $('#newChannelInput').val();
     }
   });
 });
