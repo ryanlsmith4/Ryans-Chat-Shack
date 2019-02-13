@@ -9,13 +9,11 @@ const server = require('http').Server(app);
 // Define handlebars
 const exphbs = require('express-handlebars');
 
-// Socket.io
-const io = require('socket.io')(server);
-
 const onlineUsers = {};
 
-const channels = { General: [] }
-
+const channels = { General: [] };
+// Socket.io
+const io = require('socket.io')(server);
 // const sock = require('./sockets/chat.js')(io);
 io.on('connection', (socket) => {
   console.log('🔌 New user connected! 🔌');
