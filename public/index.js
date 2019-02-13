@@ -77,7 +77,7 @@ $(document).ready(() => {
   socket.on('user has left', (onlineUsers) => {
     $('.usersOnline').empty();
     for (const username in onlineUsers) {
-      $('usersOnline').append(`<p>${username}</p>`);
+      $('.usersOnline').append(`<p>${username}</p>`);
     }
   });
 
